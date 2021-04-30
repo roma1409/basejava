@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private final Resume[] storage = new Resume[10000];
+    private final Resume[] storage = new Resume[10_000];
     private int size = 0;
 
     void clear() {
@@ -13,21 +13,15 @@ public class ArrayStorage {
         size = 0;
     }
 
-    void save(Resume r) {
-        if (get(r.uuid) == null) {
-            storage[size++] = r;
+    void save(Resume resume) {
+        if (findIndex(resume.uuid) == -1) {
+            storage[size++] = resume;
         }
     }
 
     Resume get(String uuid) {
-        Resume resume = null;
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].uuid)) {
-                resume = storage[i];
-                break;
-            }
-        }
-        return resume;
+        int index = findIndex(uuid);
+        return index == -1 ? null : storage[index];
     }
 
     void delete(String uuid) {
