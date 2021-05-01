@@ -8,10 +8,11 @@ import java.util.stream.IntStream;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
+public class ArrayStorage implements Storage {
     private final Resume[] storage = new Resume[10_000];
     private int size = 0;
 
+    @Override
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
         if (index == -1) {
@@ -21,11 +22,13 @@ public class ArrayStorage {
         }
     }
 
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
+    @Override
     public void save(Resume resume) {
         boolean isResumeNew = findIndex(resume.getUuid()) == -1;
         if (!isResumeNew) {
@@ -41,6 +44,7 @@ public class ArrayStorage {
         }
     }
 
+    @Override
     public Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index == -1) {
@@ -50,6 +54,7 @@ public class ArrayStorage {
         return storage[index];
     }
 
+    @Override
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index == -1) {
@@ -78,13 +83,12 @@ public class ArrayStorage {
         storage[--size] = null;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
+    @Override
     public int size() {
         return size;
     }
