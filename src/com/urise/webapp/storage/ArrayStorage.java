@@ -5,13 +5,7 @@ import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-/**
- * Array based storage for Resumes
- */
-public class ArrayStorage implements Storage {
-    private final Resume[] storage = new Resume[10_000];
-    private int size = 0;
-
+public class ArrayStorage extends AbstractArrayStorage {
     @Override
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
@@ -45,16 +39,6 @@ public class ArrayStorage implements Storage {
     }
 
     @Override
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index == -1) {
-            showAbsenceResumeError("GET", uuid);
-            return null;
-        }
-        return storage[index];
-    }
-
-    @Override
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index == -1) {
@@ -64,11 +48,12 @@ public class ArrayStorage implements Storage {
         }
     }
 
-    private void showAbsenceResumeError(String operation, String uuid) {
-        System.out.printf("You can't '%s' resume due to there isn't resume with this uuid: '%s'.%n", operation, uuid);
+    @Override
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
     }
 
-    private int findIndex(String uuid) {
+    protected int findIndex(String uuid) {
         return IntStream.range(0, size)
                 .filter(i -> uuid.equals(storage[i].getUuid()))
                 .findFirst()
@@ -81,15 +66,5 @@ public class ArrayStorage implements Storage {
             System.arraycopy(storage, start + 1, storage, start, length);
         }
         storage[--size] = null;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    @Override
-    public int size() {
-        return size;
     }
 }
