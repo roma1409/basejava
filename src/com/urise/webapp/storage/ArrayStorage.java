@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
 
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void addNew(Resume resume) {
-        storage[size++] = resume;
+    protected void saveToArray(Resume resume, int index) {
+        storage[size] = resume;
     }
 
     @Override

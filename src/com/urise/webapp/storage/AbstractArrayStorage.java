@@ -18,21 +18,18 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        boolean isResumeNew = findIndex(resume.getUuid()) < 0;
-        if (!isResumeNew) {
+        int index = findIndex(resume.getUuid());
+        if (index > -1) {
             System.out.printf("You can't 'SAVE' resume due to there is already a resume with this uuid: '%s'.%n", resume.getUuid());
-        }
-        boolean isEnoughSpaceInStorage = size < storage.length;
-        if (!isEnoughSpaceInStorage) {
+        } else if (size > storage.length) {
             System.out.println("You can't 'SAVE' resume due to there isn't enough space to add any new resume.");
-        }
-
-        if (isResumeNew && isEnoughSpaceInStorage) {
-            addNew(resume);
+        } else {
+            saveToArray(resume, index);
+            size++;
         }
     }
 
-    abstract protected void addNew(Resume resume);
+    abstract protected void saveToArray(Resume resume, int index);
 
     @Override
     public void delete(String uuid) {

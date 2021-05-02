@@ -6,11 +6,10 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void addNew(Resume resume) {
-        int indexForNewResume = -Arrays.binarySearch(storage, 0, size, resume) - 1;
+    protected void saveToArray(Resume resume, int index) {
+        int indexForNewResume = -index - 1;
         System.arraycopy(storage, indexForNewResume, storage, indexForNewResume + 1, size - indexForNewResume);
         storage[indexForNewResume] = resume;
-        size++;
     }
 
     @Override
