@@ -22,15 +22,16 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index > -1) {
-            throw new ExistStorageException(resume.getUuid());
-        } else if (storage.length <= size) {
-            throw new StorageException("Storage overflow.", resume.getUuid());
-        } else {
-            saveToArray(resume, index);
-            size++;
+        String uuid = resume.getUuid();
+        if (storage.length <= size) {
+            throw new StorageException("Storage overflow.", uuid);
         }
+        int index = findIndex(uuid);
+        if (index > -1) {
+            throw new ExistStorageException(uuid);
+        }
+        saveToArray(resume, index);
+        size++;
     }
 
     abstract protected void saveToArray(Resume resume, int index);
@@ -40,9 +41,8 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = findIndex(uuid);
         if (index < 0) {
             throw new NotExistStorageException(uuid);
-        } else {
-            shiftArray(index);
         }
+        shiftArray(index);
     }
 
     private void shiftArray(int index) {
@@ -69,9 +69,8 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = findIndex(resume.getUuid());
         if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage[index] = resume;
         }
+        storage[index] = resume;
     }
 
     @Override
