@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int MAX_SIZE = 10_000;
     protected final Resume[] storage = new Resume[MAX_SIZE];
     protected int size = 0;
@@ -33,8 +33,6 @@ public abstract class AbstractArrayStorage implements Storage {
         saveToArray(resume, index);
         size++;
     }
-
-    abstract protected void saveToArray(Resume resume, int index);
 
     @Override
     public void delete(String uuid) {
@@ -81,6 +79,8 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         return storage[index];
     }
+
+    protected abstract void saveToArray(Resume resume, int index);
 
     protected abstract int findIndex(String uuid);
 }
