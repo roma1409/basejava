@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -14,6 +12,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int MAX_SIZE = 10_000;
     protected final Resume[] storage = new Resume[MAX_SIZE];
     protected int size = 0;
+    private int currentElementIndex;
 
     @Override
     public int size() {
@@ -26,21 +25,34 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (storage.length <= size) {
             throw new StorageException("Storage overflow.", uuid);
         }
-        int index = findIndex(uuid);
-        if (index > -1) {
-            throw new ExistStorageException(uuid);
-        }
-        saveToArray(resume, index);
+        currentElementIndex = findIndex(uuid);
+        super.save(resume);
+    }
+
+    @Override
+    protected boolean checkResumePresence(Resume resume) {
+        return currentElementIndex > -1;
+    }
+
+    @Override
+    protected void addToStorage(Resume resume) {
+        saveToArray(resume, currentElementIndex);
         size++;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        shiftArray(index);
+    protected Object getIndexOrOptional(String uuid) {
+        return findIndex(uuid);
+    }
+
+    @Override
+    protected boolean checkResumeAbsence(Object indexOrOptional, String uuid) {
+        return (int) indexOrOptional < 0;
+    }
+
+    @Override
+    protected void removeFromStorage(Object indexOrOptional, String uuid) {
+        shiftArray((int) indexOrOptional);
     }
 
     private void shiftArray(int index) {
@@ -63,21 +75,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        storage[index] = resume;
+    protected void updateInStorage(Object indexOrOptional, Resume resume) {
+        storage[(int) indexOrOptional] = resume;
     }
 
     @Override
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
+    protected Resume getFromStorage(Object indexOrOptional, String uuid) {
+        return storage[(int) indexOrOptional];
     }
 
     protected abstract void saveToArray(Resume resume, int index);

@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
@@ -17,20 +15,28 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void save(Resume resume) {
-        if (storage.contains(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
+    protected boolean checkResumePresence(Resume resume) {
+        return storage.contains(resume);
+    }
+
+    @Override
+    protected void addToStorage(Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    public void delete(String uuid) {
-        Optional<Resume> optionalResume = getOptionalResume(uuid);
-        if (optionalResume.isEmpty()) {
-            throw new NotExistStorageException(uuid);
-        }
-        storage.remove(optionalResume.get());
+    protected Object getIndexOrOptional(String uuid) {
+        return getOptionalResume(uuid);
+    }
+
+    @Override
+    protected boolean checkResumeAbsence(Object indexOrOptional, String uuid) {
+        return ((Optional<Resume>) indexOrOptional).isEmpty();
+    }
+
+    @Override
+    protected void removeFromStorage(Object indexOrOptional, String uuid) {
+        storage.remove(((Optional<Resume>) indexOrOptional).get());
     }
 
     @Override
@@ -40,24 +46,17 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[size()]);
+        return storage.toArray(new Resume[0]);
     }
 
     @Override
-    public void update(Resume resume) {
-        if (!storage.contains(resume)) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    protected void updateInStorage(Object indexOrOptional, Resume resume) {
         storage.set(storage.indexOf(resume), resume);
     }
 
     @Override
-    public Resume get(String uuid) {
-        Optional<Resume> optionalResume = getOptionalResume(uuid);
-        if (optionalResume.isEmpty()) {
-            throw new NotExistStorageException(uuid);
-        }
-        return optionalResume.get();
+    protected Resume getFromStorage(Object indexOrOptional, String uuid) {
+        return ((Optional<Resume>) indexOrOptional).get();
     }
 
     private Optional<Resume> getOptionalResume(String uuid) {

@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -17,18 +15,27 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void save(Resume resume) {
-        if (storage.containsValue(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
+    protected boolean checkResumePresence(Resume resume) {
+        return storage.containsValue(resume);
+    }
+
+    @Override
+    protected void addToStorage(Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    public void delete(String uuid) {
-        if (!storage.containsKey(uuid)) {
-            throw new NotExistStorageException(uuid);
-        }
+    protected Object getIndexOrOptional(String uuid) {
+        return null;
+    }
+
+    @Override
+    protected boolean checkResumeAbsence(Object indexOrOptional, String uuid) {
+        return !storage.containsKey(uuid);
+    }
+
+    @Override
+    protected void removeFromStorage(Object indexOrOptional, String uuid) {
         storage.remove(uuid);
     }
 
@@ -45,18 +52,12 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        if (!storage.containsKey(resume.getUuid())) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    protected void updateInStorage(Object indexOrOptional, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    public Resume get(String uuid) {
-        if (!storage.containsKey(uuid)) {
-            throw new NotExistStorageException(uuid);
-        }
+    protected Resume getFromStorage(Object indexOrOptional, String uuid) {
         return storage.get(uuid);
     }
 }
