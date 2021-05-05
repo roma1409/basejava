@@ -48,7 +48,7 @@ public class ListStorage extends AbstractStorage {
         if (!storage.contains(resume)) {
             throw new NotExistStorageException(resume.getUuid());
         }
-        storage.add(resume);
+        storage.set(storage.indexOf(resume), resume);
     }
 
     @Override
