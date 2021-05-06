@@ -5,11 +5,14 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
+    private static final Logger LOGGER = Logger.getLogger(AbstractArrayStorage.class.getName());
+
     protected static final int STORAGE_LIMIT = 10000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -37,6 +40,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     @Override
     protected void doSave(Resume r, Integer index) {
         if (size == STORAGE_LIMIT) {
+            LOGGER.warning("Storage overflow");
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
             insertElement(r, index);
