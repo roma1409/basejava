@@ -4,7 +4,7 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.jupiter.api.Test;
 
-import static com.urise.webapp.storage.AbstractArrayStorage.MAX_SIZE;
+import static com.urise.webapp.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
@@ -14,11 +14,11 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
 
     @Test
     void saveOverflow() {
-        for (int i = storage.size(); i < MAX_SIZE; i++) {
+        for (int i = storage.size(); i < STORAGE_LIMIT; i++) {
             storage.save(new Resume(String.format("%d", i)));
         }
-        checkSize(MAX_SIZE);
+        assertSize(STORAGE_LIMIT);
         assertThrows(StorageException.class, () -> storage.save(new Resume(UUID_4)));
-        checkSize(MAX_SIZE);
+        assertSize(STORAGE_LIMIT);
     }
 }

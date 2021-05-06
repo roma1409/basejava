@@ -5,51 +5,52 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    @Override
-    public void save(Resume resume) {
-        if (checkResumePresence(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        addToStorage(resume);
+
+    protected abstract Object getSearchKey(String uuid);
+
+    protected abstract void doUpdate(Resume r, Object searchKey);
+
+    protected abstract boolean isExist(Object searchKey);
+
+    protected abstract void doSave(Resume r, Object searchKey);
+
+    protected abstract Resume doGet(Object searchKey);
+
+    protected abstract void doDelete(Object searchKey);
+
+    public void update(Resume r) {
+        Object searchKey = getExistedSearchKey(r.getUuid());
+        doUpdate(r, searchKey);
     }
 
-    protected abstract boolean checkResumePresence(Resume resume);
+    public void save(Resume r) {
+        Object searchKey = getNotExistedSearchKey(r.getUuid());
+        doSave(r, searchKey);
+    }
 
-    protected abstract void addToStorage(Resume resume);
-
-    @Override
     public void delete(String uuid) {
-        Object indexOrOptional = checkResumeAbsence(uuid);
-        removeFromStorage(indexOrOptional, uuid);
+        Object searchKey = getExistedSearchKey(uuid);
+        doDelete(searchKey);
     }
 
-    private Object checkResumeAbsence(String uuid) {
-        Object indexOrOptional = getIndexOrOptional(uuid);
-        if (checkResumeAbsence(indexOrOptional, uuid)) {
+    public Resume get(String uuid) {
+        Object searchKey = getExistedSearchKey(uuid);
+        return doGet(searchKey);
+    }
+
+    private Object getExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return indexOrOptional;
+        return searchKey;
     }
 
-    protected abstract Object getIndexOrOptional(String uuid);
-
-    protected abstract boolean checkResumeAbsence(Object indexOrOptional, String uuid);
-
-    protected abstract void removeFromStorage(Object indexOrOptional, String uuid);
-
-    @Override
-    public void update(Resume resume) {
-        Object indexOrOptional = checkResumeAbsence(resume.getUuid());
-        updateInStorage(indexOrOptional, resume);
+    private Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
     }
-
-    protected abstract void updateInStorage(Object indexOrOptional, Resume resume);
-
-    @Override
-    public Resume get(String uuid) {
-        Object indexOrOptional = checkResumeAbsence(uuid);
-        return getFromStorage(indexOrOptional, uuid);
-    }
-
-    protected abstract Resume getFromStorage(Object indexOrOptional, String uuid);
 }

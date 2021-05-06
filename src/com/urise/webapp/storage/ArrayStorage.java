@@ -2,19 +2,22 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.stream.IntStream;
-
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void saveToArray(Resume resume, int index) {
-        storage[size] = resume;
+    protected void fillDeletedElement(int index) {
+        storage[index] = storage[size - 1];
+    }
+    @Override
+    protected void insertElement(Resume r, int index) {
+        storage[size] = r;
     }
 
-    @Override
-    protected int findIndex(String uuid) {
-        return IntStream.range(0, size)
-                .filter(i -> uuid.equals(storage[i].getUuid()))
-                .findFirst()
-                .orElse(-1);
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

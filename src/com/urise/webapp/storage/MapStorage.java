@@ -2,62 +2,54 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class MapStorage extends AbstractStorage {
-    private final Map<String, Resume> storage = new TreeMap<>();
+    private final Map<String, Resume> map = new HashMap<>();
 
     @Override
-    public int size() {
-        return storage.size();
+    protected String getSearchKey(String uuid) {
+        return uuid;
     }
 
     @Override
-    protected boolean checkResumePresence(Resume resume) {
-        return storage.containsValue(resume);
+    protected void doUpdate(Resume r, Object searchKey) {
+        map.put(String.valueOf(searchKey), r);
     }
 
     @Override
-    protected void addToStorage(Resume resume) {
-        storage.put(resume.getUuid(), resume);
+    protected boolean isExist(Object searchKey) {
+        return map.containsKey(String.valueOf(searchKey));
     }
 
     @Override
-    protected Object getIndexOrOptional(String uuid) {
-        return null;
+    protected void doSave(Resume r, Object searchKey) {
+        map.put(String.valueOf(searchKey), r);
     }
 
     @Override
-    protected boolean checkResumeAbsence(Object indexOrOptional, String uuid) {
-        return !storage.containsKey(uuid);
+    protected Resume doGet(Object searchKey) {
+        return map.get(String.valueOf(searchKey));
     }
 
     @Override
-    protected void removeFromStorage(Object indexOrOptional, String uuid) {
-        storage.remove(uuid);
+    protected void doDelete(Object searchKey) {
+        map.remove(String.valueOf(searchKey));
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        map.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        Resume[] resumes = storage.values().toArray(new Resume[0]);
-        System.out.println(Arrays.toString(resumes));
-        return resumes;
+        return map.values().toArray(new Resume[0]);
     }
 
     @Override
-    protected void updateInStorage(Object indexOrOptional, Resume resume) {
-        storage.put(resume.getUuid(), resume);
-    }
-
-    @Override
-    protected Resume getFromStorage(Object indexOrOptional, String uuid) {
-        return storage.get(uuid);
+    public int size() {
+        return map.size();
     }
 }

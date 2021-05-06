@@ -4,64 +4,57 @@ import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ListStorage extends AbstractStorage {
-    private final List<Resume> storage = new ArrayList<>();
+    private final List<Resume> list = new ArrayList<>();
 
     @Override
-    public int size() {
-        return storage.size();
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
     }
 
     @Override
-    protected boolean checkResumePresence(Resume resume) {
-        return storage.contains(resume);
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected void addToStorage(Resume resume) {
-        storage.add(resume);
+    protected void doUpdate(Resume r, Object searchKey) {
+        list.set((Integer) searchKey, r);
     }
 
     @Override
-    protected Object getIndexOrOptional(String uuid) {
-        return getOptionalResume(uuid);
+    protected void doSave(Resume r, Object searchKey) {
+        list.add(r);
     }
 
     @Override
-    protected boolean checkResumeAbsence(Object indexOrOptional, String uuid) {
-        return ((Optional<Resume>) indexOrOptional).isEmpty();
+    protected Resume doGet(Object searchKey) {
+        return list.get((Integer) searchKey);
     }
 
     @Override
-    protected void removeFromStorage(Object indexOrOptional, String uuid) {
-        storage.remove(((Optional<Resume>) indexOrOptional).get());
+    protected void doDelete(Object searchKey) {
+        list.remove(((Integer) searchKey).intValue());
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        list.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[0]);
+        return list.toArray(new Resume[0]);
     }
 
     @Override
-    protected void updateInStorage(Object indexOrOptional, Resume resume) {
-        storage.set(storage.indexOf(resume), resume);
-    }
-
-    @Override
-    protected Resume getFromStorage(Object indexOrOptional, String uuid) {
-        return ((Optional<Resume>) indexOrOptional).get();
-    }
-
-    private Optional<Resume> getOptionalResume(String uuid) {
-        return storage.stream()
-                .filter(currentResume -> uuid.equals(currentResume.getUuid()))
-                .findFirst();
+    public int size() {
+        return list.size();
     }
 }
