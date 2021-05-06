@@ -6,6 +6,9 @@ import com.urise.webapp.model.Resume;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractStorageTest {
@@ -21,10 +24,10 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_1 = new Resume(UUID_1, "Vasya");
+        RESUME_2 = new Resume(UUID_2, "Vasya");
+        RESUME_3 = new Resume(UUID_3, "Vasya");
+        RESUME_4 = new Resume(UUID_4, "Vasya");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -52,7 +55,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = new Resume(UUID_1);
+        Resume newResume = new Resume(UUID_1, "Vasya");
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_1));
     }
@@ -63,9 +66,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] array = storage.getAll();
-        assertEquals(3, array.length);
+    public void getAllSorted() {
+        List<Resume> actual = storage.getAllSorted();
+        assertEquals(3, actual.size());
+        assertEquals(Arrays.asList(RESUME_1, RESUME_2, RESUME_3), actual);
     }
 
     @Test

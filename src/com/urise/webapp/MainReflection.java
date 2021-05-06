@@ -8,7 +8,7 @@ public class MainReflection {
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         System.out.println(Resume.class
                 .getMethod("toString")
-                .invoke(new Resume("uuid1"))
+                .invoke(new Resume("uuid1", "Vasya"))
         );
     }
 }
