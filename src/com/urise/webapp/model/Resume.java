@@ -1,6 +1,8 @@
 package com.urise.webapp.model;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -9,6 +11,8 @@ import java.util.Objects;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
+    private final Map<SectionType, Section> sections = new HashMap<>();
+    private final Map<ContactType, String> contacts = new HashMap<>();
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
@@ -19,24 +23,42 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
+    public void addSection(SectionType type, Section section) {
+        sections.put(type, section);
+    }
+
+    public void removeSection(SectionType type) {
+        sections.remove(type);
+    }
+
+    public void addContact(ContactType type, String contact) {
+        contacts.put(type, contact);
+    }
+
+    public void removeContact(ContactType type) {
+        contacts.remove(type);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName);
+        return Objects.equals(uuid, resume.uuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid);
     }
 
     @Override
     public String toString() {
         return "Resume{" +
-                "uuid='" + uuid + '\'' +
-                ", fullName='" + fullName + '\'' +
+                "\nuuid='" + uuid + '\'' +
+                ", \nfullName='" + fullName + '\'' +
+                ", \nsections=" + sections +
+                ", \ncontacts=" + contacts +
                 '}';
     }
 
