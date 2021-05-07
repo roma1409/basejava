@@ -16,8 +16,12 @@ public class PlaceSection implements Section {
 
     @Override
     public String toString() {
-        return "PlaceSection{" +
-                "places=" + places +
-                '}';
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n");
+        for (Place item : places) {
+            builder.append("- ").append(item).append("\n");
+        }
+        builder.setLength(builder.length() - 1);
+        return builder.toString();
     }
 }

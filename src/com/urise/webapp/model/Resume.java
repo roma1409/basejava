@@ -1,9 +1,8 @@
 package com.urise.webapp.model;
 
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Initial resume class
@@ -11,8 +10,8 @@ import java.util.Objects;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
-    private final Map<SectionType, Section> sections = new HashMap<>();
-    private final Map<ContactType, String> contacts = new HashMap<>();
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
@@ -39,27 +38,22 @@ public class Resume implements Comparable<Resume> {
         contacts.remove(type);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid);
-    }
 
     @Override
     public String toString() {
-        return "Resume{" +
-                "\nuuid='" + uuid + '\'' +
-                ", \nfullName='" + fullName + '\'' +
-                ", \nsections=" + sections +
-                ", \ncontacts=" + contacts +
-                '}';
+        StringBuilder contactsBuilder = new StringBuilder();
+        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            contactsBuilder.append(entry.getKey()).append(": ");
+            contactsBuilder.append(entry.getValue()).append("\n");
+        }
+        StringBuilder sectionBuilder = new StringBuilder();
+        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            sectionBuilder.append(entry.getKey()).append(": ");
+            sectionBuilder.append(entry.getValue()).append("\n\n");
+        }
+        sectionBuilder.setLength(sectionBuilder.length() - 2);
+
+        return String.format("Resume: %s %s\n\n%s \n%s", fullName, uuid, contactsBuilder, sectionBuilder);
     }
 
     @Override

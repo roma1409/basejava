@@ -24,11 +24,11 @@ public class ResumeTestData {
         grigoriy.addContact(STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         grigoriy.addContact(HOME_PAGE, "http://gkislin.ru/");
 
-        grigoriy.addSection(OBJECTIVE, new Text("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
+        grigoriy.addSection(OBJECTIVE, new SingleLineSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
 
-        grigoriy.addSection(PERSONAL, new Text("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+        grigoriy.addSection(PERSONAL, new SingleLineSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
-        UnOrderedList achievements = new UnOrderedList();
+        BulletedListSection achievements = new BulletedListSection();
         achievements.addItem("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
         achievements.addItem("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
         achievements.addItem("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
@@ -37,7 +37,7 @@ public class ResumeTestData {
         achievements.addItem("Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
         grigoriy.addSection(ACHIEVEMENT, achievements);
 
-        UnOrderedList qualifications = new UnOrderedList();
+        BulletedListSection qualifications = new BulletedListSection();
         qualifications.addItem("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         qualifications.addItem("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
         qualifications.addItem("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
@@ -62,9 +62,13 @@ public class ResumeTestData {
         grigoriy.addSection(EXPERIENCE, experience);
 
         PlaceSection education = new PlaceSection();
-        experience.addPlace(new Place("Coursera", YearMonth.parse("2013-03"), YearMonth.parse("2013-05"), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
-        experience.addPlace(new Place("Luxoft", YearMonth.parse("2011-03"), YearMonth.parse("2011-04"), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
-        experience.addPlace(new Place("Siemens AG", YearMonth.parse("2005-01"), YearMonth.parse("2005-04"), "3 месяца обучения мобильным IN сетям (Берлин)"));
+        education.addPlace(new Place("Coursera", YearMonth.parse("2013-03"), YearMonth.parse("2013-05"), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
+        education.addPlace(new Place("Luxoft", YearMonth.parse("2011-03"), YearMonth.parse("2011-04"), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
+        education.addPlace(new Place("Siemens AG", YearMonth.parse("2005-01"), YearMonth.parse("2005-04"), "3 месяца обучения мобильным IN сетям (Берлин)"));
+        education.addPlace(new Place("Alcatel", YearMonth.parse("1997-09"), YearMonth.parse("1998-03"), "6 месяцев обучения цифровым телефонным сетям (Москва)"));
+        education.addPlace(new Place("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.parse("1993-09"), YearMonth.parse("1996-07"), "Аспирантура (программист С, С++)"));
+        education.addPlace(new Place("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.parse("1987-09"), YearMonth.parse("1993-07"), "Инженер (программист Fortran, C)"));
+        education.addPlace(new Place("Заочная физико-техническая школа при МФТИ", YearMonth.parse("1984-09"), YearMonth.parse("1987-06"), "Закончил с отличием"));
         grigoriy.addSection(EDUCATION, education);
 
         return grigoriy;

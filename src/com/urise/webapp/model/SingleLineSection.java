@@ -1,9 +1,9 @@
 package com.urise.webapp.model;
 
-public class Text implements Section {
+public class SingleLineSection implements Section {
     private final String description;
 
-    public Text(String description) {
+    public SingleLineSection(String description) {
         this.description = description;
     }
 

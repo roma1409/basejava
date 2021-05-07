@@ -3,7 +3,7 @@ package com.urise.webapp.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnOrderedList implements Section {
+public class BulletedListSection implements Section {
     private final List<String> items = new ArrayList<>();
 
     public void addItem(String item) {
@@ -16,6 +16,12 @@ public class UnOrderedList implements Section {
 
     @Override
     public String toString() {
-        return "" + items + "\n";
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n");
+        for (String item : items) {
+            builder.append("- ").append(item).append("\n");
+        }
+        builder.setLength(builder.length() - 1);
+        return builder.toString();
     }
 }

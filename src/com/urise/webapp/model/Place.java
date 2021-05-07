@@ -31,12 +31,10 @@ public class Place {
 
     @Override
     public String toString() {
-        return "Place{" +
-                "company='" + company + '\'' +
+        return "company='" + company + '\'' +
                 ", from=" + from +
                 ", to=" + to +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}' + "\n";
+                ", description='" + description + '\'';
     }
 }
