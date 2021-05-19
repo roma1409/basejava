@@ -3,6 +3,7 @@ package com.urise.webapp.model;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Initial resume class
@@ -38,7 +39,6 @@ public class Resume implements Comparable<Resume> {
         contacts.remove(type);
     }
 
-
     @Override
     public String toString() {
         StringBuilder contactsBuilder = new StringBuilder();
@@ -46,14 +46,19 @@ public class Resume implements Comparable<Resume> {
             contactsBuilder.append(entry.getKey()).append(": ");
             contactsBuilder.append(entry.getValue()).append("\n");
         }
+        if (!contactsBuilder.isEmpty()) {
+            contactsBuilder.insert(0, "\n\n");
+        }
         StringBuilder sectionBuilder = new StringBuilder();
         for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
             sectionBuilder.append(entry.getKey()).append(": ");
             sectionBuilder.append(entry.getValue()).append("\n\n");
         }
-        sectionBuilder.setLength(sectionBuilder.length() - 2);
-
-        return String.format("Resume: %s %s\n\n%s \n%s", fullName, uuid, contactsBuilder, sectionBuilder);
+        if (!sectionBuilder.isEmpty()) {
+            sectionBuilder.setLength(sectionBuilder.length() - 2);
+            sectionBuilder.insert(0, "\n");
+        }
+        return String.format("Resume: %s %s %s %s", fullName, uuid, contactsBuilder, sectionBuilder);
     }
 
     @Override
@@ -61,5 +66,18 @@ public class Resume implements Comparable<Resume> {
         return Comparator.comparing((Resume r) -> r.fullName)
                 .thenComparing(r -> r.uuid)
                 .compare(this, other);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName) && Objects.equals(sections, resume.sections) && Objects.equals(contacts, resume.contacts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, fullName, sections, contacts);
     }
 }
