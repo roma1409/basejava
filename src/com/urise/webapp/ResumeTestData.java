@@ -9,12 +9,12 @@ import static com.urise.webapp.model.SectionType.*;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Resume grigoriy = init();
+        Resume grigoriy = createResume("uud1", "Grigoriy Kislin");
         System.out.println(grigoriy);
     }
 
-    private static Resume init() {
-        Resume grigoriy = new Resume("uud1", "Grigoriy Kislin");
+    public static Resume createResume(String uuid, String fullName) {
+        Resume grigoriy = new Resume(uuid, fullName);
 
         grigoriy.addContact(PHONE, "+7 999 999 99 99");
         grigoriy.addContact(SKYPE, "grigory.kislin");
