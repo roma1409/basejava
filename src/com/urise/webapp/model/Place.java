@@ -1,40 +1,25 @@
 package com.urise.webapp.model;
 
-import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Place {
     private final String company;
-    private final YearMonth from;
-    private YearMonth to;
-    private final String title;
-    private final String description;
+    private final List<Period> periods = new ArrayList<>();
 
-    public Place(String company, YearMonth from, String title, String description) {
+    public Place(String company) {
         this.company = company;
-        this.from = from;
-        this.title = title;
-        this.description = description;
     }
 
-    public Place(String company, YearMonth from, YearMonth to, String title) {
-        this(company, from, to, title, "");
-    }
-
-    public Place(String company, YearMonth from, YearMonth to, String title, String description) {
-        this(company, from, title, description);
-        this.to = to;
-    }
-
-    public void setTo(YearMonth to) {
-        this.to = to;
+    public void addPeriod(Period period) {
+        periods.add(period);
     }
 
     @Override
     public String toString() {
-        return "company='" + company + '\'' +
-                ", from=" + from +
-                ", to=" + to +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'';
+        return "Place{" +
+                "company='" + company + '\'' +
+                ", periods=" + periods +
+                '}';
     }
 }

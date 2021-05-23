@@ -56,19 +56,37 @@ public class ResumeTestData {
         grigoriy.addSection(QUALIFICATIONS, qualifications);
 
         PlaceSection experience = new PlaceSection();
-        experience.addPlace(new Place("Java Online Projects", YearMonth.parse("2013-10"), "Автор проекта", "Создание, организация и проведение Java онлайн проектов и стажировок."));
-        experience.addPlace(new Place("Wrike", YearMonth.parse("2014-10"), YearMonth.parse("2016-01"), "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO"));
-        experience.addPlace(new Place("RIT Center", YearMonth.parse("2012-04"), YearMonth.parse("2014-10"), "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"));
+        Place javaOps = new Place("Java Online Projects");
+        javaOps.addPeriod(new Period(YearMonth.parse("2013-10"), "Автор проекта", "Создание, организация и проведение Java онлайн проектов и стажировок."));
+        experience.addPlace(javaOps);
+        Place wrike = new Place("Wrike");
+        wrike.addPeriod(new Period(YearMonth.parse("2014-10"), YearMonth.parse("2016-01"), "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO"));
+        experience.addPlace(wrike);
+        Place rit = new Place("RIT Center");
+        rit.addPeriod(new Period(YearMonth.parse("2012-04"), YearMonth.parse("2014-10"), "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"));
+        experience.addPlace(rit);
         grigoriy.addSection(EXPERIENCE, experience);
 
         PlaceSection education = new PlaceSection();
-        education.addPlace(new Place("Coursera", YearMonth.parse("2013-03"), YearMonth.parse("2013-05"), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
-        education.addPlace(new Place("Luxoft", YearMonth.parse("2011-03"), YearMonth.parse("2011-04"), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
-        education.addPlace(new Place("Siemens AG", YearMonth.parse("2005-01"), YearMonth.parse("2005-04"), "3 месяца обучения мобильным IN сетям (Берлин)"));
-        education.addPlace(new Place("Alcatel", YearMonth.parse("1997-09"), YearMonth.parse("1998-03"), "6 месяцев обучения цифровым телефонным сетям (Москва)"));
-        education.addPlace(new Place("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.parse("1993-09"), YearMonth.parse("1996-07"), "Аспирантура (программист С, С++)"));
-        education.addPlace(new Place("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", YearMonth.parse("1987-09"), YearMonth.parse("1993-07"), "Инженер (программист Fortran, C)"));
-        education.addPlace(new Place("Заочная физико-техническая школа при МФТИ", YearMonth.parse("1984-09"), YearMonth.parse("1987-06"), "Закончил с отличием"));
+        Place coursera = new Place("Coursera");
+        coursera.addPeriod(new Period(YearMonth.parse("2013-03"), YearMonth.parse("2013-05"), "\"Functional Programming Principles in Scala\" by Martin Odersky"));
+        education.addPlace(coursera);
+        Place luxoft = new Place("Luxoft");
+        luxoft.addPeriod(new Period(YearMonth.parse("2011-03"), YearMonth.parse("2011-04"), "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
+        education.addPlace(luxoft);
+        Place siemensAg = new Place("Siemens AG");
+        siemensAg.addPeriod(new Period(YearMonth.parse("2005-01"), YearMonth.parse("2005-04"), "3 месяца обучения мобильным IN сетям (Берлин)"));
+        education.addPlace(siemensAg);
+        Place alcatel = new Place("Alcatel");
+        alcatel.addPeriod(new Period(YearMonth.parse("1997-09"), YearMonth.parse("1998-03"), "6 месяцев обучения цифровым телефонным сетям (Москва)"));
+        education.addPlace(alcatel);
+        Place itmo = new Place("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики");
+        itmo.addPeriod(new Period(YearMonth.parse("1993-09"), YearMonth.parse("1996-07"), "Аспирантура (программист С, С++)"));
+        itmo.addPeriod(new Period(YearMonth.parse("1987-09"), YearMonth.parse("1993-07"), "Инженер (программист Fortran, C)"));
+        education.addPlace(itmo);
+        Place mfti = new Place("Заочная физико-техническая школа при МФТИ");
+        mfti.addPeriod(new Period(YearMonth.parse("1984-09"), YearMonth.parse("1987-06"), "Закончил с отличием"));
+        education.addPlace(mfti);
         grigoriy.addSection(EDUCATION, education);
 
         return grigoriy;
