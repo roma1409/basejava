@@ -1,6 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.ResumeTestData;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.urise.webapp.ResumeTestData.createResume;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractStorageTest {
@@ -25,10 +25,10 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        RESUME_1 = ResumeTestData.createResume(UUID_1, "Vasya");
-        RESUME_2 = ResumeTestData.createResume(UUID_2, "Vasya");
-        RESUME_3 = ResumeTestData.createResume(UUID_3, "Vasya");
-        RESUME_4 = ResumeTestData.createResume(UUID_4, "Vasya");
+        RESUME_1 = createResume(UUID_1, "Vasya");
+        RESUME_2 = createResume(UUID_2, "Vasya");
+        RESUME_3 = createResume(UUID_3, "Vasya");
+        RESUME_4 = createResume(UUID_4, "Vasya");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -56,7 +56,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = new Resume(UUID_1, "Vasya");
+        Resume newResume = createResume(UUID_1, "Vasya");
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_1));
     }

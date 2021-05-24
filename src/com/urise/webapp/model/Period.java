@@ -27,14 +27,14 @@ public class Period {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Period{");
-        builder.append("from=").append(from);
+        builder.append("{");
+        builder.append(from);
         if (Objects.nonNull(to)) {
-            builder.append(", to=").append(to);
+            builder.append(" to ").append(to);
         }
-        builder.append(", title='").append(title);
+        builder.append(", ").append(title);
         if (Objects.nonNull(description) && !description.isBlank()) {
-            builder.append(", description='").append(description);
+            builder.append(", ").append(description);
         }
         builder.append('}');
         return builder.toString();

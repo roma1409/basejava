@@ -4,6 +4,8 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
+import static com.urise.webapp.ResumeTestData.createResume;
+
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void fillDeletedElement(int index) {
@@ -22,7 +24,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid, "Vasya");
+        Resume searchKey = createResume(uuid, "Vasya");
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 }

@@ -34,7 +34,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     public List<Resume> doGetAll() {
-        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
@@ -42,10 +42,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         if (size == STORAGE_LIMIT) {
             LOGGER.warning("Storage overflow");
             throw new StorageException("Storage overflow", r.getUuid());
-        } else {
-            insertElement(r, index);
-            size++;
         }
+        insertElement(r, index);
+        size++;
+
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import static com.urise.webapp.ResumeTestData.createResume;
+
 /**
  * Interactive test for ArrayStorage implementation
  * (just run, no need to understand)
@@ -38,7 +40,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume(uuid, "Vasya");
+                    r = createResume(uuid, "Vasya");
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
@@ -54,7 +56,7 @@ public class MainArray {
                     printAll();
                     break;
                 case "update":
-                    r = new Resume(uuid, "Vasya");
+                    r = createResume(uuid, "Vasya");
                     ARRAY_STORAGE.update(r);
                     printAll();
                     break;

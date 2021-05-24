@@ -98,6 +98,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return directory.list().length;
+        return Objects.requireNonNull(directory.list()).length;
     }
 }

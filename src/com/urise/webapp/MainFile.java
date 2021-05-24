@@ -9,17 +9,16 @@ public class MainFile {
         showFiles(".");
     }
 
-    public static void showFiles(String dirName) throws IOException {
-        File dir = new File(dirName);
+    public static void showFiles(String path) throws IOException {
+        File dir = new File(path);
         File[] files = dir.listFiles();
 
         if (Objects.nonNull(files)) {
             for (File file : files) {
-                String fullName = file.getCanonicalPath();
-                System.out.println(fullName);
+                System.out.println(file.getName());
 
                 if (file.isDirectory()) {
-                    showFiles(fullName);
+                    showFiles(file.getCanonicalPath());
                 }
             }
         }
