@@ -19,7 +19,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
             for (int i = storage.size(); i < STORAGE_LIMIT; i++) {
                 storage.save(createResume(String.format("%d", i), "Vasya"));
             }
-        } catch (Exception e) {
+        } catch (StorageException e) {
             fail();
         }
         assertSize(STORAGE_LIMIT);

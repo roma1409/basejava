@@ -4,8 +4,6 @@ import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.ArrayStorage;
 import com.urise.webapp.storage.Storage;
 
-import static com.urise.webapp.ResumeTestData.createResume;
-
 /**
  * Test for your ArrayStorage implementation
  */
@@ -13,10 +11,10 @@ public class MainTestArrayStorage {
     static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = createResume("uuid1", "Vasya");
-        Resume r2 = createResume("uuid2", "Vasya");
-        Resume r3 = createResume("uuid3", "Vasya");
-        Resume r4 = createResume("uuid4", "Vasya");
+        Resume r1 = new Resume("uuid1", "Vasya");
+        Resume r2 = new Resume("uuid2", "Vasya");
+        Resume r3 = new Resume("uuid3", "Vasya");
+        Resume r4 = new Resume("uuid4", "Vasya");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
