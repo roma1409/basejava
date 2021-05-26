@@ -33,20 +33,18 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        printDirectoryDeeply(dir);
+        System.out.println();
+        printDirectoryDeeply(dir, "");
     }
 
-    // TODO: make pretty output
-    public static void printDirectoryDeeply(File dir) {
+    public static void printDirectoryDeeply(File dir, String tabulation) {
         File[] files = dir.listFiles();
 
         if (files != null) {
             for (File file : files) {
-                if (file.isFile()) {
-                    System.out.println("File: " + file.getName());
-                } else if (file.isDirectory()) {
-                    System.out.println("Directory: " + file.getName());
-                    printDirectoryDeeply(file);
+                System.out.printf("%s%s%n", tabulation, file.getName());
+                if (file.isDirectory()) {
+                    printDirectoryDeeply(file, tabulation.concat("\t"));
                 }
             }
         }
