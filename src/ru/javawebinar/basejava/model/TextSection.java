@@ -1,10 +1,8 @@
 package ru.javawebinar.basejava.model;
 
-import java.io.Serial;
 import java.util.Objects;
 
 public class TextSection extends AbstractSection {
-    @Serial
     private static final long serialVersionUID = 1L;
 
     private String content;

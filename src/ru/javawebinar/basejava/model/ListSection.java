@@ -1,6 +1,5 @@
 package ru.javawebinar.basejava.model;
 
-import java.io.Serial;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +9,6 @@ import java.util.Objects;
  * 14.07.2016
  */
 public class ListSection extends AbstractSection {
-    @Serial
     private static final long serialVersionUID = 1L;
 
     private List<String> items;
