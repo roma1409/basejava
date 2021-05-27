@@ -3,6 +3,6 @@ lib
 out
 *.iml
 log
-basejava/storage/
-
-
+storage
+!./src/*
+!./test/*

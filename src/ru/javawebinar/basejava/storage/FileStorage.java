@@ -15,9 +15,9 @@ import java.util.Objects;
  */
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private SerializationStrategy serializationStrategy;
+    private final SerializationStrategy serializationStrategy;
 
-    protected FileStorage(File dirPath) {
+    protected FileStorage(File dirPath, SerializationStrategy serializationStrategy) {
         Objects.requireNonNull(dirPath, "directory must not be null");
         if (!dirPath.isDirectory()) {
             throw new IllegalArgumentException(dirPath.getAbsolutePath() + " is not directory");
@@ -26,29 +26,20 @@ public class FileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(dirPath.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = dirPath;
-    }
-
-    public void setSerializableStrategy(SerializationStrategy strategy) {
-        this.serializationStrategy = strategy;
+        this.serializationStrategy = serializationStrategy;
     }
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                doDelete(file);
-            }
+        File[] files = getFiles();
+        for (File file : files) {
+            doDelete(file);
         }
     }
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("Directory read error", null);
-        }
-        return list.length;
+        return getFiles().length;
     }
 
     @Override
@@ -98,14 +89,19 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Directory read error", null);
-        }
-        List<Resume> list = new ArrayList<>(files.length);
+        File[] files = getFiles();
+        List<Resume> resumes = new ArrayList<>(files.length);
         for (File file : files) {
-            list.add(doGet(file));
+            resumes.add(doGet(file));
         }
-        return list;
+        return resumes;
+    }
+
+    private File[] getFiles() {
+        File[] files = directory.listFiles();
+        if (Objects.isNull(files)) {
+            throw new StorageException("Directory clear error", null);
+        }
+        return files;
     }
 }
