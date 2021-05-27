@@ -9,11 +9,14 @@ import java.util.Objects;
  * gkislin
  * 14.07.2016
  */
-public class ListSection extends Section {
+public class ListSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<String> items;
+    private List<String> items;
+
+    public ListSection() {
+    }
 
     public ListSection(String... items) {
         this(Arrays.asList(items));

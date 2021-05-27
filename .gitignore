@@ -4,5 +4,5 @@ out
 *.iml
 log
 storage
-!./src/*
-!./test/*
+!src/**/storage/
+!test/**/storage/
