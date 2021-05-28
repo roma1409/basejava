@@ -25,7 +25,6 @@ public class ResumeTestData {
         grigoriy.addContact(HOME_PAGE, "http://gkislin.ru/");
 
         grigoriy.addSection(OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
-
         grigoriy.addSection(PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
         ListSection achievements = new ListSection(
