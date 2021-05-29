@@ -48,28 +48,12 @@ public class DataSerializationStrategy implements SerializationStrategy {
         }
     }
 
-    private void writeDate(DataOutputStream dos, LocalDate startDate) throws IOException {
-        dos.writeInt(startDate.getYear());
-        dos.writeInt(startDate.getMonthValue());
-    }
-
-    private interface Writer<T> {
-        void write(T item) throws IOException;
-    }
-
-    private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writer<T> writer) throws IOException {
-        dos.writeInt(collection.size());
-        for (T item : collection) {
-            writer.write(item);
-        }
-    }
-
     private void writeSection(DataOutputStream dos, SectionType sectionType, AbstractSection sectionValue) throws IOException {
         dos.writeUTF(sectionType.name());
         switch (sectionType) {
             case PERSONAL:
             case OBJECTIVE:
-                dos.writeUTF(sectionValue.toString());
+                dos.writeUTF(((TextSection)sectionValue).getContent());
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
@@ -93,14 +77,19 @@ public class DataSerializationStrategy implements SerializationStrategy {
         }
     }
 
-    private interface Executor {
-        void execute() throws IOException;
+    private void writeDate(DataOutputStream dos, LocalDate startDate) throws IOException {
+        dos.writeInt(startDate.getYear());
+        dos.writeInt(startDate.getMonthValue());
     }
 
-    private void readCollection(DataInputStream dis, Executor executor) throws IOException {
-        int quantity = dis.readInt();
-        for (int i = 0; i < quantity; i++) {
-            executor.execute();
+    private interface Writer<T> {
+        void write(T item) throws IOException;
+    }
+
+    private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writer<T> writer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T item : collection) {
+            writer.write(item);
         }
     }
 
@@ -124,8 +113,8 @@ public class DataSerializationStrategy implements SerializationStrategy {
                     Link link = new Link(dis.readUTF(), dis.readUTF());
                     List<Organization.Position> positions = new ArrayList<>();
                     readCollection(dis, () -> {
-                        LocalDate startDate = LocalDate.of(dis.readInt(), dis.readInt(), 1);
-                        LocalDate endDate = LocalDate.of(dis.readInt(), dis.readInt(), 1);
+                        LocalDate startDate = readDate(dis);
+                        LocalDate endDate = readDate(dis);
                         String title = dis.readUTF();
                         String description = dis.readUTF();
                         positions.add(new Organization.Position(startDate, endDate, title, description));
@@ -137,5 +126,20 @@ public class DataSerializationStrategy implements SerializationStrategy {
                 break;
         }
         return sectionValue;
+    }
+
+    private interface Executor {
+        void execute() throws IOException;
+    }
+
+    private void readCollection(DataInputStream dis, Executor executor) throws IOException {
+        int quantity = dis.readInt();
+        for (int i = 0; i < quantity; i++) {
+            executor.execute();
+        }
+    }
+
+    private LocalDate readDate(DataInputStream dis) throws IOException {
+        return LocalDate.of(dis.readInt(), dis.readInt(), 1);
     }
 }
