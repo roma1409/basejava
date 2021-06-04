@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static ru.javawebinar.basejava.ResumeTestData.createResume;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
@@ -29,10 +28,10 @@ public abstract class AbstractStorageTest {
     private static final Resume R4;
 
     static {
-        R1 = createResume(UUID_1, "Name1");
-        R2 = createResume(UUID_2, "Name1");
-        R3 = createResume(UUID_3, "Name1");
-        R4 = createResume(UUID_4, "Name1");
+        R1 = new Resume(UUID_1, "Name1");
+        R2 = new Resume(UUID_2, "Name1");
+        R3 = new Resume(UUID_3, "Name1");
+        R4 = new Resume(UUID_4, "Name1");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -60,7 +59,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = createResume(UUID_1, "New Name");
+        Resume newResume = new Resume(UUID_1, "New Name");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }

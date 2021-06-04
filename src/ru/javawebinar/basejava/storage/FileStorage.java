@@ -99,7 +99,7 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] getFiles() {
         File[] files = directory.listFiles();
         if (Objects.isNull(files)) {
-            throw new StorageException("Directory clear error", null);
+            throw new StorageException("Directory clear error");
         }
         return files;
     }

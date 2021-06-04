@@ -53,7 +53,7 @@ public class DataSerializationStrategy implements SerializationStrategy {
         switch (sectionType) {
             case PERSONAL:
             case OBJECTIVE:
-                dos.writeUTF(((TextSection)sectionValue).getContent());
+                dos.writeUTF(((TextSection) sectionValue).getContent());
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
