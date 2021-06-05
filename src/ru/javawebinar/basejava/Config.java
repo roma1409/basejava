@@ -20,7 +20,8 @@ public class Config {
     private Config() {
         try (InputStream stream = new FileInputStream(PROPERTY_FILE)) {
             properties.load(stream);
-            storageDir = new File(properties.getProperty("storage.dir"));
+            String storagePathKey = "Linux".equals(System.getProperty("os.name")) ? "storage.dir.linux" : "storage.dir.win";
+            storageDir = new File(properties.getProperty(storagePathKey));
         } catch (IOException e) {
             throw new IllegalStateException(String.format("Invalid config file %s", PROPERTY_FILE.getAbsolutePath()));
         }
