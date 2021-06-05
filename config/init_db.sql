@@ -1,4 +1,4 @@
-create table resume
+create table if not exists resume
 (
     uuid      char(36) not null
         constraint resume_pk
@@ -6,7 +6,7 @@ create table resume
     full_name text     not null
 );
 
-create table contact
+create table if not exists contact
 (
     id          serial   not null
         constraint contact_pk primary key,
@@ -18,6 +18,6 @@ create table contact
     value       text     not null
 );
 
-create sequence contact_id_seq as integer;
+create sequence if not exists contact_id_seq as integer;
 
-create unique index contact_uuid_type_index on contact (resume_uuid, type);
+create unique index if not exists contact_uuid_type_index on contact (resume_uuid, type);
