@@ -25,10 +25,30 @@ public class SqlHelper {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             return command.execute(statement);
         } catch (SQLException e) {
-            if (Objects.equals(UNIQUE_VIOLATION_STATE, e.getSQLState())) {
-                throw new ExistStorageException(null);
+            throw handleUniqueViolation(e);
+        }
+    }
+
+    public <T> T transactionalExecute(SqlTransaction<T> transaction) {
+        try (Connection connection = connectionFactory.getConnection()) {
+            try {
+                connection.setAutoCommit(false);
+                T res = transaction.execute(connection);
+                connection.commit();
+                return res;
+            } catch (SQLException e) {
+                connection.rollback();
+                throw handleUniqueViolation(e);
             }
+        } catch (SQLException e) {
             throw new StorageException(e);
         }
+    }
+
+    private StorageException handleUniqueViolation(SQLException e) throws StorageException {
+        if (Objects.equals(UNIQUE_VIOLATION_STATE, e.getSQLState())) {
+            throw new ExistStorageException(null);
+        }
+        return new StorageException(e);
     }
 }

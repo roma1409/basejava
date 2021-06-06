@@ -7,6 +7,7 @@ import ru.javawebinar.basejava.sql.Command;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,20 +57,23 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume r) {
         final String uuid = r.getUuid();
-        helper.execute("INSERT INTO resume (uuid, full_name) VALUES (?, ?)", (statement) -> {
-            statement.setString(1, uuid);
-            statement.setString(2, r.getFullName());
-            statement.execute();
+        helper.transactionalExecute(connection -> {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?, ?)")) {
+                statement.setString(1, uuid);
+                statement.setString(2, r.getFullName());
+                statement.execute();
+            }
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)")) {
+                for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {
+                    statement.setString(1, uuid);
+                    statement.setString(2, entry.getKey().name());
+                    statement.setString(3, entry.getValue());
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+            }
             return null;
         });
-        for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {
-            helper.execute("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)", statement -> {
-                statement.setString(1, uuid);
-                statement.setString(2, entry.getKey().name());
-                statement.setString(3, entry.getValue());
-                return null;
-            });
-        }
     }
 
     @Override
