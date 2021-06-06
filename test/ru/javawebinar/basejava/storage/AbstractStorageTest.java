@@ -5,12 +5,11 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,6 +29,9 @@ public abstract class AbstractStorageTest {
 
     static {
         R1 = new Resume(UUID_1, "Name1");
+        R1.addContact(ContactType.PHONE, "921-555-55-55");
+        R1.addContact(ContactType.SKYPE, "skype-nick");
+
         R2 = new Resume(UUID_2, "Name2");
         R3 = new Resume(UUID_3, "Name3");
         R4 = new Resume(UUID_4, "Name4");
@@ -72,9 +74,12 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        List<Resume> list = storage.getAllSorted();
-        assertEquals(3, list.size());
-        assertEquals(list, Arrays.asList(R1, R2, R3));
+        List<Resume> actual = storage.getAllSorted();
+        assertEquals(3, actual.size());
+
+        List<Resume> expected = Arrays.asList(R1, R2, R3);
+        Collections.sort(expected);
+        assertEquals(expected, actual);
     }
 
     @Test
