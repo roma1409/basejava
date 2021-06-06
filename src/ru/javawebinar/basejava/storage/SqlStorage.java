@@ -1,13 +1,17 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.sql.Command;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class SqlStorage implements Storage {
     private final SqlHelper helper;
@@ -23,25 +27,49 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return helper.execute("SELECT * FROM resume WHERE uuid = ?", (statement) -> {
+        String query = "" +
+                "SELECT * FROM resume r " +
+                "LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
+                "WHERE r.uuid = ?";
+
+        Command<Resume> command = (statement) -> {
             statement.setString(1, uuid);
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
                 throw new NotExistStorageException(uuid);
             }
-            return new Resume(uuid, resultSet.getString("full_name"));
-        });
+            Resume resume = new Resume(uuid, resultSet.getString("full_name"));
+            do {
+                String value = resultSet.getString("value");
+                String typeStr = resultSet.getString("type");
+                if (Objects.nonNull(value) && Objects.nonNull(typeStr)) {
+                    ContactType type = ContactType.valueOf(typeStr);
+                    resume.addContact(type, value);
+                }
+            } while (resultSet.next());
+            return resume;
+        };
+
+        return helper.execute(query, command);
     }
 
     @Override
     public void save(Resume r) {
+        final String uuid = r.getUuid();
         helper.execute("INSERT INTO resume (uuid, full_name) VALUES (?, ?)", (statement) -> {
-            statement.setString(1, r.getUuid());
+            statement.setString(1, uuid);
             statement.setString(2, r.getFullName());
             statement.execute();
-
             return null;
         });
+        for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {
+            helper.execute("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)", statement -> {
+                statement.setString(1, uuid);
+                statement.setString(2, entry.getKey().name());
+                statement.setString(3, entry.getValue());
+                return null;
+            });
+        }
     }
 
     @Override
