@@ -1,10 +1,15 @@
 package ru.javawebinar.basejava.web;
 
+import ru.javawebinar.basejava.Config;
+import ru.javawebinar.basejava.model.Resume;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -13,8 +18,26 @@ public class ResumeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 //        response.setHeader("Content-Type", "text/html; charset=UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        String name = request.getParameter("name");
-        response.getWriter().write(name == null ? "Hello Resumes!" : "Hello " + name + '!');
+        PrintWriter writer = response.getWriter();
+        List<Resume> resumes = Config.get()
+                .getSqlStorage()
+                .getAllSorted();
+        writer.write("<div style='width:500px; margin:130px auto 0'>");
+        writer.write(String.format("<h1>There %d resumes:</h1>\n", resumes.size()));
+        if (resumes.size() > 0) {
+            writer.write("<table style='border-collapse:collapse;'>");
+            writer.write("<tr>");
+            writer.write("<th>Full Name</th>");
+            writer.write("<th>Uuid</th>");
+            writer.write("</tr>");
+            for (Resume resume : resumes) {
+                writer.write("<tr style='border:1px solid black;'>");
+                writer.write(String.format("<td>%s</td>%n<td style='padding-left:50px;'>%s</td>", resume.getFullName(), resume.getUuid()));
+                writer.write("</tr>");
+            }
+            writer.write("</table>");
+            writer.write("</div>");
+        }
     }
 
     @Override

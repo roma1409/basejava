@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private static final File PROPERTY_FILE = new File("./config/resumes.properties");
+    private static final File PROPERTY_FILE = new File("C:/Users/roman.pogorelov/Desktop/javaops/basejava/config/resumes.properties");
     private static final Config INSTANCE = new Config();
 
     private final File storageDir;
