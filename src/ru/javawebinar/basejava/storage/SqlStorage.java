@@ -99,25 +99,25 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return helper.execute("" +
-                        "SELECT * FROM resume r " +
-                        "LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
-                        "ORDER BY r.full_name, r.uuid",
-                statement -> {
-                    ResultSet resultSet = statement.executeQuery();
-                    Map<String, Resume> uuidToResume = new LinkedHashMap<>();
-                    while (resultSet.next()) {
-                        String uuid = resultSet.getString("uuid");
-                        Resume resume = uuidToResume.get(uuid);
-                        if (Objects.isNull(resume)) {
-                            resume = new Resume(uuid, resultSet.getString("full_name"));
-                            uuidToResume.put(uuid, resume);
-                        }
-                        addContact(resultSet, resume);
-                    }
-
-                    return new ArrayList<>(uuidToResume.values());
-                });
+        return helper.transactionalExecute(connection -> {
+            Map<String, Resume> uuidToResume = new LinkedHashMap<>();
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("uuid");
+                    uuidToResume.put(uuid, new Resume(uuid, resultSet.getString("full_name")));
+                }
+            }
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM contact")) {
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("resume_uuid");
+                    Resume resume = uuidToResume.get(uuid);
+                    addContact(resultSet, resume);
+                }
+            }
+            return new ArrayList<>(uuidToResume.values());
+        });
     }
 
     @Override
