@@ -5,11 +5,13 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,6 +33,12 @@ public abstract class AbstractStorageTest {
         R1 = new Resume(UUID_1, "Name1");
         R1.addContact(ContactType.PHONE, "921-555-55-55");
         R1.addContact(ContactType.SKYPE, "skype-nick");
+
+        R1.addSection(SectionType.PERSONAL, new TextSection("personal"));
+        R1.addSection(SectionType.OBJECTIVE, new TextSection("fullstack developer"));
+
+        R1.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement1", "achievement2", "achievement3"));
+        R1.addSection(SectionType.QUALIFICATIONS, new ListSection("qualification1", "qualification2", "qualification3"));
 
         R2 = new Resume(UUID_2, "Name2");
         R3 = new Resume(UUID_3, "Name3");
@@ -66,6 +74,8 @@ public abstract class AbstractStorageTest {
         newResume.addContact(ContactType.MAIL, "mail1@google.com");
         newResume.addContact(ContactType.SKYPE, "NewSkype");
         newResume.addContact(ContactType.MOBILE, "+7 921 222-22-22");
+        newResume.addSection(SectionType.PERSONAL, new TextSection("text-section: personal"));
+        newResume.addSection(SectionType.QUALIFICATIONS, new ListSection("qualification4", "qualification5", "qualification6"));
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }
