@@ -9,6 +9,7 @@
     <title>Список всех резюме</title>
 </head>
 <body>
+<jsp:include page="fragment/header.jsp"/>
 <section>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
@@ -32,5 +33,6 @@
         %>
     </table>
 </section>
+<jsp:include page="fragment/footer.jsp"/>
 </body>
 </html>
