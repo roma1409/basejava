@@ -33,6 +33,7 @@ public abstract class AbstractStorageTest {
         R1 = new Resume(UUID_1, "Name1");
         R1.addContact(ContactType.PHONE, "921-555-55-55");
         R1.addContact(ContactType.SKYPE, "skype-nick");
+        R1.addContact(ContactType.MAIL, "mail@my.com");
 
         R1.addSection(SectionType.PERSONAL, new TextSection("personal"));
         R1.addSection(SectionType.OBJECTIVE, new TextSection("fullstack developer"));
