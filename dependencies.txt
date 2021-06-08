@@ -9,3 +9,4 @@ jsp-api-2.0
 jstl-1.2
 junit-4.13.1
 postgresql-42.2.1
+jakarta.servlet.jsp.jstl-api-2.0.0
