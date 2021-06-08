@@ -218,11 +218,14 @@ public class SqlStorage implements Storage {
                 switch (type) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        value = ((TextSection) entry.getValue()).getContent();
+                        TextSection textSection = (TextSection) entry.getValue();
+                        value = textSection.getContent();
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        value = String.join("\n", ((ListSection) entry.getValue()).getItems());
+                        ListSection listSection = (ListSection) entry.getValue();
+                        List<String> items = listSection.getItems();
+                        value = String.join("\n", items);
                         break;
                 }
                 if (Objects.nonNull(value)) {

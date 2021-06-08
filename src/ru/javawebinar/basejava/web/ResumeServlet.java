@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.SqlStorage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,18 +13,21 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
+    private SqlStorage storage;
+
+    @Override
+    public void init() throws ServletException {
+        storage = Config.get().getSqlStorage();
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-//        response.setHeader("Content-Type", "text/html; charset=UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = response.getWriter();
-        List<Resume> resumes = Config.get()
-                .getSqlStorage()
-                .getAllSorted();
         writer.write("<div style='width:500px; margin:130px auto 0'>");
-        writer.write(String.format("<h1>There %d resumes:</h1>\n", resumes.size()));
+        List<Resume> resumes = storage.getAllSorted();
+        writer.write(String.format("<h1>There are %d resumes:</h1>\n", resumes.size()));
         if (resumes.size() > 0) {
             writer.write("<table style='border-collapse:collapse;'>");
             writer.write("<tr>");
