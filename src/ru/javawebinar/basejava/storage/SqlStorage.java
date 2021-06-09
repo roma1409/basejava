@@ -1,8 +1,12 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.*;
 import java.util.*;
@@ -191,21 +195,8 @@ public class SqlStorage implements Storage {
         String typeString = resultSet.getString("type");
         if (Objects.nonNull(typeString)) {
             SectionType type = SectionType.valueOf(typeString);
-            String value = resultSet.getString("value");
-            AbstractSection section = null;
-            switch (type) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    section = new TextSection(value);
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    section = new ListSection(value.split("\n"));
-                    break;
-            }
-            if (Objects.nonNull(section)) {
-                resume.addSection(type, section);
-            }
+            AbstractSection section = JsonParser.read(resultSet.getString("value"), AbstractSection.class);
+            resume.addSection(type, section);
         }
     }
 
@@ -214,26 +205,11 @@ public class SqlStorage implements Storage {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
                 SectionType type = entry.getKey();
-                String value = null;
-                switch (type) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        TextSection textSection = (TextSection) entry.getValue();
-                        value = textSection.getContent();
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        ListSection listSection = (ListSection) entry.getValue();
-                        List<String> items = listSection.getItems();
-                        value = String.join("\n", items);
-                        break;
-                }
-                if (Objects.nonNull(value)) {
-                    statement.setString(1, uuid);
-                    statement.setString(2, type.name());
-                    statement.setString(3, value);
-                    statement.addBatch();
-                }
+                String section = JsonParser.write(entry.getValue(), AbstractSection.class);
+                statement.setString(1, uuid);
+                statement.setString(2, type.name());
+                statement.setString(3, section);
+                statement.addBatch();
             }
             statement.executeBatch();
         }

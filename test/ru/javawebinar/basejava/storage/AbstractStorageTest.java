@@ -11,40 +11,13 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static ru.javawebinar.basejava.TestData.*;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storage;
-
-    private static final String UUID_1 = UUID.randomUUID().toString();
-    private static final String UUID_2 = UUID.randomUUID().toString();
-    private static final String UUID_3 = UUID.randomUUID().toString();
-    private static final String UUID_4 = UUID.randomUUID().toString();
-
-    private static final Resume R1;
-    private static final Resume R2;
-    private static final Resume R3;
-    private static final Resume R4;
-
-    static {
-        R1 = new Resume(UUID_1, "Name1");
-        R1.addContact(ContactType.PHONE, "921-555-55-55");
-        R1.addContact(ContactType.SKYPE, "skype-nick");
-        R1.addContact(ContactType.MAIL, "mail@my.com");
-
-        R1.addSection(SectionType.PERSONAL, new TextSection("personal"));
-        R1.addSection(SectionType.OBJECTIVE, new TextSection("fullstack developer"));
-
-        R1.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement1", "achievement2", "achievement3"));
-        R1.addSection(SectionType.QUALIFICATIONS, new ListSection("qualification1", "qualification2", "qualification3"));
-
-        R2 = new Resume(UUID_2, "Name2");
-        R3 = new Resume(UUID_3, "Name3");
-        R4 = new Resume(UUID_4, "Name4");
-    }
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
