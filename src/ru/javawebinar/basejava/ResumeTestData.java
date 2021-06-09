@@ -21,7 +21,7 @@ public class ResumeTestData {
         grigoriy.addContact(MAIL, "gkislin@yandex.ru");
         grigoriy.addContact(LINKEDIN, "https://www.linkedin.com/in/gkislin");
         grigoriy.addContact(GITHUB, "https://github.com/gkislin");
-        grigoriy.addContact(STATCKOVERFLOW, "https://stackoverflow.com/users/548473");
+        grigoriy.addContact(STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         grigoriy.addContact(HOME_PAGE, "http://gkislin.ru/");
 
         grigoriy.addSection(OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
