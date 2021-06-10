@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private static final File PROPERTY_FILE = new File("C:/Users/roman.pogorelov/Desktop/javaops/basejava/config/resumes.properties");
+    private static final File PROPERTY_FILE = new File(getConfigPath());
     private static final Config INSTANCE = new Config();
 
     private final File storageDir;
@@ -17,6 +17,11 @@ public class Config {
 
     public static Config get() {
         return INSTANCE;
+    }
+
+    private static String getConfigPath() {
+        String projectPath = "Linux".equals(System.getProperty("os.name")) ? "/home/roman/Desktop" : "C:/Users/roman.pogorelov/Desktop/javaops";
+        return projectPath.concat("/basejava/config/resumes.properties");
     }
 
     private Config() {
