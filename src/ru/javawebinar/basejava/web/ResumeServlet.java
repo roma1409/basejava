@@ -1,8 +1,7 @@
 package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.SqlStorage;
 
 import javax.servlet.ServletException;
@@ -44,17 +43,29 @@ public class ResumeServlet extends HttpServlet {
                 throw new IllegalStateException("Unexpected value: " + action);
         }
         request.setAttribute("resume", resume);
-        request.getRequestDispatcher(Objects.equals("view", action) ? "WEB-INF/jsp/view.jsp" : "WEB-INF/jsp/edit.jsp")
-                .forward(request, response);
+
+        String nextPath = Objects.equals("view", action) ? "WEB-INF/jsp/view.jsp" : "WEB-INF/jsp/edit.jsp";
+        request.getRequestDispatcher(nextPath).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
+
         Resume resume = storage.get(uuid);
         resume.setFullName(fullName);
+        setContactsFromRequest(request, resume);
+        setSectionsFromRequest(request, resume);
+
+        storage.update(resume);
+
+        response.sendRedirect("resume");
+    }
+
+    private void setContactsFromRequest(HttpServletRequest request, Resume resume) {
         for (ContactType contactType : ContactType.values()) {
             String contactValue = request.getParameter(contactType.name());
             if (Objects.isNull(contactValue) || contactValue.isBlank()) {
@@ -63,9 +74,29 @@ public class ResumeServlet extends HttpServlet {
                 resume.addContact(contactType, contactValue);
             }
         }
-//         use it to handle sections:
-//        request.getParameterValues("section");
-        storage.update(resume);
-        response.sendRedirect("resume");
+    }
+
+    private void setSectionsFromRequest(HttpServletRequest request, Resume resume) {
+        for (SectionType sectionType : SectionType.values()) {
+            String sectionValue = request.getParameter(sectionType.name());
+            AbstractSection section = null;
+            if (Objects.isNull(sectionValue) || sectionValue.isBlank()) {
+                resume.getSections().remove(sectionType);
+            } else {
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        section = new TextSection(sectionValue);
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        section = new ListSection(sectionValue.split("\n"));
+                        break;
+                }
+                if (Objects.nonNull(section)) {
+                    resume.addSection(sectionType, section);
+                }
+            }
+        }
     }
 }

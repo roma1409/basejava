@@ -1,6 +1,9 @@
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
+<%@ page import="ru.javawebinar.basejava.model.SectionType" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% pageContext.setAttribute("newLineChar", "\n"); %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,9 +28,25 @@
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
-        <input type="text" name="section" size=30 value="1"><br/>
-        <input type="text" name="section" size=30 value="2"><br/>
-        <input type="text" name="section" size=30 value="3"><br/>
+        <c:forEach var="type" items="<%=SectionType.values()%>">
+            <c:set var="section" value="${resume.getSection(type)}"/>
+            <dl>
+                <dt>${type.title}</dt>
+                <dd>
+                    <c:choose>
+                        <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
+                            <input type="text" name="${type.name()}" size=30 value="${section}">
+                        </c:when>
+                        <c:when test="${type.equals(SectionType.QUALIFICATIONS) || type.equals(SectionType.ACHIEVEMENT)}">
+                            <c:set var="items" value="${section.getItems()}"/>
+                            <c:set var="strings" value="${fn:join(items.toArray(), newLineChar)}"/>
+                            <c:set var="size" value="${items.size()}"/>
+                            <textarea cols="50" rows="5" name="${type.name()}">${strings}</textarea>
+                        </c:when>
+                    </c:choose>
+                </dd>
+            </dl>
+        </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
         <button onclick="window.history.back()">Отменить</button>
