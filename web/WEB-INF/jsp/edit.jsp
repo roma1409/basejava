@@ -43,6 +43,9 @@
                             <c:set var="size" value="${items.size()}"/>
                             <textarea cols="85" rows="10" name="${type.name()}">${strings}</textarea>
                         </c:when>
+                        <c:when test="${type.equals(SectionType.EXPERIENCE) || type.equals(SectionType.EDUCATION)}">
+                            <input hidden name="${type.name()}" value="${section}">
+                        </c:when>
                     </c:choose>
                 </dd>
             </dl>
