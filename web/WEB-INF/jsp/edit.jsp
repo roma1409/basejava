@@ -35,13 +35,13 @@
                 <dd>
                     <c:choose>
                         <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
-                            <input type="text" name="${type.name()}" size=30 value="${section}">
+                            <input type="text" name="${type.name()}" size=80 value="${section}">
                         </c:when>
                         <c:when test="${type.equals(SectionType.QUALIFICATIONS) || type.equals(SectionType.ACHIEVEMENT)}">
                             <c:set var="items" value="${section.getItems()}"/>
                             <c:set var="strings" value="${fn:join(items.toArray(), newLineChar)}"/>
                             <c:set var="size" value="${items.size()}"/>
-                            <textarea cols="50" rows="5" name="${type.name()}">${strings}</textarea>
+                            <textarea cols="85" rows="10" name="${type.name()}">${strings}</textarea>
                         </c:when>
                     </c:choose>
                 </dd>
@@ -49,7 +49,7 @@
         </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragment/footer.jsp"/>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ResumeServlet extends HttpServlet {
@@ -90,7 +91,10 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        section = new ListSection(sectionValue.split("\n"));
+                        String[] newListSectionValues = Arrays.stream(sectionValue.split("\n"))
+                                .filter(str -> !str.isBlank())
+                                .toArray(String[]::new);
+                        section = new ListSection(newListSectionValues);
                         break;
                 }
                 if (Objects.nonNull(section)) {
