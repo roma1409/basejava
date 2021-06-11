@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.SqlStorage;
 
@@ -32,6 +33,9 @@ public class ResumeServlet extends HttpServlet {
 
         Resume resume;
         switch (action) {
+            case "create":
+                resume = new Resume("");
+                break;
             case "delete":
                 storage.delete(uuid);
                 response.sendRedirect("resume");
@@ -56,12 +60,23 @@ public class ResumeServlet extends HttpServlet {
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
 
-        Resume resume = storage.get(uuid);
+        boolean isCreationOperation = false;
+        Resume resume;
+        try {
+            resume = storage.get(uuid);
+        } catch (NotExistStorageException e) {
+            resume = new Resume(uuid, fullName);
+            isCreationOperation = true;
+        }
         resume.setFullName(fullName);
         setContactsFromRequest(request, resume);
         setSectionsFromRequest(request, resume);
 
-        storage.update(resume);
+        if (isCreationOperation) {
+            storage.save(resume);
+        } else {
+            storage.update(resume);
+        }
 
         response.sendRedirect("resume");
     }
