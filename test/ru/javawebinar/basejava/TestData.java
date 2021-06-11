@@ -2,6 +2,7 @@ package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.*;
 
+import java.time.Month;
 import java.util.UUID;
 
 public class TestData {
@@ -16,19 +17,9 @@ public class TestData {
     public static final Resume R4;
 
     static {
-        R1 = new Resume(UUID_1, "Name1");
-        R1.addContact(ContactType.PHONE, "921-555-55-55");
-        R1.addContact(ContactType.SKYPE, "skype-nick");
-        R1.addContact(ContactType.MAIL, "mail@my.com");
-
-        R1.addSection(SectionType.PERSONAL, new TextSection("personal"));
-        R1.addSection(SectionType.OBJECTIVE, new TextSection("fullstack developer"));
-
-        R1.addSection(SectionType.ACHIEVEMENT, new ListSection("achievement1", "achievement2", "achievement3"));
-        R1.addSection(SectionType.QUALIFICATIONS, new ListSection("qualification1", "qualification2", "qualification3"));
-
-        R2 = new Resume(UUID_2, "Name2");
-        R3 = new Resume(UUID_3, "Name3");
-        R4 = new Resume(UUID_4, "Name4");
+        R1 = ResumeTestData.createResume(UUID_1, "Name1");
+        R2 = ResumeTestData.createResume(UUID_2, "Name2");
+        R3 = ResumeTestData.createResume(UUID_3, "Name3");
+        R4 = ResumeTestData.createResume(UUID_4, "Name4");
     }
 }
