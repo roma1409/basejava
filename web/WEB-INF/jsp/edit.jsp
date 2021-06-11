@@ -24,7 +24,7 @@
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
                 <dt>${type.title}</dt>
-                <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
+                <dd><input type="text" name="${type.name()}" size=50 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
@@ -34,16 +34,17 @@
                 <dt>${type.title}</dt>
                 <dd>
                     <c:choose>
-                        <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
+                        <c:when test="${type eq SectionType.OBJECTIVE}">
                             <input type="text" name="${type.name()}" size=80 value="${section}">
                         </c:when>
-                        <c:when test="${type.equals(SectionType.QUALIFICATIONS) || type.equals(SectionType.ACHIEVEMENT)}">
-                            <c:set var="items" value="${section.getItems()}"/>
-                            <c:set var="strings" value="${fn:join(items.toArray(), newLineChar)}"/>
-                            <c:set var="size" value="${items.size()}"/>
+                        <c:when test="${type eq SectionType.PERSONAL}">
+                            <textarea name="${type.name()}" cols="85" rows="3">${section}</textarea>
+                        </c:when>
+                        <c:when test="${type eq SectionType.QUALIFICATIONS || type eq SectionType.ACHIEVEMENT}">
+                            <c:set var="strings" value="${fn:join(section.getItems().toArray(), newLineChar)}"/>
                             <textarea cols="85" rows="10" name="${type.name()}">${strings}</textarea>
                         </c:when>
-                        <c:when test="${type.equals(SectionType.EXPERIENCE) || type.equals(SectionType.EDUCATION)}">
+                        <c:when test="${type eq SectionType.EXPERIENCE || type eq SectionType.EDUCATION}">
                             <input hidden name="${type.name()}" value="${section}">
                         </c:when>
                     </c:choose>

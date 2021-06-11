@@ -30,10 +30,10 @@
             <c:set var="value" value="${sectionEntry.getValue()}"/>
     <h3>${type.getTitle()} :</h3>
     <c:choose>
-        <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
+        <c:when test="${type eq SectionType.PERSONAL || type eq SectionType.OBJECTIVE}">
             ${value}
         </c:when>
-        <c:when test="${type.equals(SectionType.QUALIFICATIONS) || type.equals(SectionType.ACHIEVEMENT)}">
+        <c:when test="${type eq SectionType.QUALIFICATIONS || type eq SectionType.ACHIEVEMENT}">
             <c:set var="items" value="${value.getItems()}"/>
             <c:if test="${items.size() > 0}">
                 <ul>
@@ -43,7 +43,7 @@
                 </ul>
             </c:if>
         </c:when>
-        <c:when test="${type.equals(SectionType.EXPERIENCE) || type.equals(SectionType.EDUCATION)}">
+        <c:when test="${type eq SectionType.EXPERIENCE || type eq SectionType.EDUCATION}">
             <c:set var="items" value="${value.getOrganizations()}"/>
             <c:if test="${items.size() > 0}">
                 <ul>
@@ -58,9 +58,9 @@
                                     <c:when test="${urlPresence}">
                                         <a href="${url}">${organizationName}</a>
                                     </c:when>
-                                    <c:when test="${!urlPresence}">
+                                    <c:otherwise>
                                         ${organizationName}
-                                    </c:when>
+                                    </c:otherwise>
                                 </c:choose>
                             </h4>
                             <ul>
@@ -70,8 +70,8 @@
                                         <c:set var="endDate" value="${position.getEndDate()}"/>
                                         <c:set var="title" value="${position.getTitle()}"/>
                                         <c:set var="description" value="${position.getDescription()}"/>
-                                            ${startDate} - ${endDate.equals(DateUtil.NOW) ? "Настоящее время" : endDate}
-                                        <b>${title}</b> ${description}
+                                        ${DateUtil.formatDates(position)}
+                                        <b>${title}.</b> ${description.isBlank()? "" : description.concat(".")}
                                     </li>
                                 </c:forEach>
                             </ul>
