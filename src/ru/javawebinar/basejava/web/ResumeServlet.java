@@ -68,14 +68,16 @@ public class ResumeServlet extends HttpServlet {
             resume = new Resume(uuid, fullName);
             isCreationOperation = true;
         }
-        resume.setFullName(fullName);
-        setContactsFromRequest(request, resume);
-        setSectionsFromRequest(request, resume);
+        if (!fullName.isBlank()) {
+            resume.setFullName(fullName);
+            setContactsFromRequest(request, resume);
+            setSectionsFromRequest(request, resume);
 
-        if (isCreationOperation) {
-            storage.save(resume);
-        } else {
-            storage.update(resume);
+            if (isCreationOperation) {
+                storage.save(resume);
+            } else {
+                storage.update(resume);
+            }
         }
 
         response.sendRedirect("resume");

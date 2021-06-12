@@ -11,6 +11,8 @@
 <body>
 <jsp:include page="fragment/header.jsp"/>
 <section>
+    <a href="resume?action=create">Add new Resume</a>
+    <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
             <th>Имя</th>
@@ -29,8 +31,6 @@
             </tr>
         </c:forEach>
     </table>
-    <hr>
-    <a href="resume?action=create">Add new Resume</a>
 </section>
 <jsp:include page="fragment/footer.jsp"/>
 </body>
