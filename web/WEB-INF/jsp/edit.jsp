@@ -45,7 +45,42 @@
                             <textarea cols="85" rows="10" name="${type.name()}">${strings}</textarea>
                         </c:when>
                         <c:when test="${type eq SectionType.EXPERIENCE || type eq SectionType.EDUCATION}">
-                            <input hidden name="${type.name()}" value="${section}">
+                            <c:set var="organizations" value="${section.getOrganizations()}"/>
+                            <c:forEach var="organization" items="${organizations}" varStatus="counter">
+                                <c:if test="${counter.index > 0}">
+                                    <hr>
+                                </c:if>
+                                <c:set var="homePage" value="${organization.getHomePage()}"/>
+                                <c:set var="organizationName" value="${homePage.getName()}"/>
+                                <c:set var="url" value="${homePage.getUrl()}"/>
+                                <label>
+                                    Название: <input type="text" size="80" value="${organizationName}" required>
+                                </label><br>
+                                <label>
+                                    Ссылка: <input type="text" size="80" value="${url}" class="link-input">
+                                </label><br><br>
+                                <c:forEach var="position" items="${organization.getPositions()}" varStatus="counter2">
+                                    <c:if test="${counter2.index > 0}">
+                                        <br>
+                                    </c:if>
+                                    <c:set var="startDate" value="${position.getStartDate()}"/>
+                                    <c:set var="endDate" value="${position.getEndDate()}"/>
+                                    <c:set var="title" value="${position.getTitle()}"/>
+                                    <c:set var="description" value="${position.getDescription()}"/>
+                                    <label>
+                                        Начало работы: <input type="text" value="${startDate}" required>
+                                    </label>
+                                    <label>
+                                        Окончание: <input type="text" value="${endDate}">
+                                    </label><br>
+                                    <label>
+                                        Заголовок: <input type="text" size="80" value="${title}">
+                                    </label><br>
+                                    <label>
+                                        Описание: <textarea cols="82" rows="5">${description}</textarea>
+                                    </label><br>
+                                </c:forEach>
+                            </c:forEach>
                         </c:when>
                     </c:choose>
                 </dd>
