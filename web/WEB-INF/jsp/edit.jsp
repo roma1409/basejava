@@ -1,9 +1,13 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
 <%@ page import="ru.javawebinar.basejava.model.SectionType" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
+
 <% pageContext.setAttribute("newLineChar", "\n"); %>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -46,6 +50,9 @@
                         </c:when>
                         <c:when test="${type eq SectionType.EXPERIENCE || type eq SectionType.EDUCATION}">
                             <c:set var="organizations" value="${section.getOrganizations()}"/>
+                            <%--                            <script>--%>
+                            <%--                                alert("${organizations.size()}")--%>
+                            <%--                            </script>--%>
                             <c:forEach var="organization" items="${organizations}" varStatus="counter">
                                 <c:if test="${counter.index > 0}">
                                     <hr>
@@ -53,32 +60,29 @@
                                 <c:set var="homePage" value="${organization.getHomePage()}"/>
                                 <c:set var="organizationName" value="${homePage.getName()}"/>
                                 <c:set var="url" value="${homePage.getUrl()}"/>
-                                <label>
-                                    Название: <input type="text" size="80" value="${organizationName}" required>
-                                </label><br>
-                                <label>
-                                    Ссылка: <input type="text" size="80" value="${url}" class="link-input">
-                                </label><br><br>
-                                <c:forEach var="position" items="${organization.getPositions()}" varStatus="counter2">
-                                    <c:if test="${counter2.index > 0}">
-                                        <br>
-                                    </c:if>
+                                Название: <input type="text" size="80" value="${organizationName}" name="${type}"
+                                                 required>
+                                <br>
+                                Ссылка: <input type="text" size="80" value="${url}" class="link-input"
+                                               name="${type}-url">
+                                <br>
+                                <c:forEach var="position" items="${organization.getPositions()}">
                                     <c:set var="startDate" value="${position.getStartDate()}"/>
                                     <c:set var="endDate" value="${position.getEndDate()}"/>
                                     <c:set var="title" value="${position.getTitle()}"/>
                                     <c:set var="description" value="${position.getDescription()}"/>
-                                    <label>
-                                        Начало работы: <input type="text" value="${startDate}" required>
-                                    </label>
-                                    <label>
-                                        Окончание: <input type="text" value="${endDate}">
-                                    </label><br>
-                                    <label>
-                                        Заголовок: <input type="text" size="80" value="${title}">
-                                    </label><br>
-                                    <label>
-                                        Описание: <textarea cols="82" rows="5">${description}</textarea>
-                                    </label><br>
+                                    Начало работы: <input type="text" value="${DateUtil.format(startDate)}"
+                                                          required
+                                                          name="${type}-${counter.index}-startDate">
+                                    Окончание: <input type="text" value="${DateUtil.format(endDate)}"
+                                                      name="${type}-${counter.index}-endDate">
+                                    <br>
+                                    Заголовок: <input type="text" size="80" value="${title}"
+                                                      name="${type}-${counter.index}-title" required>
+                                    <br>
+                                    Описание: <textarea cols="82" rows="5"
+                                                        name="${type}-${counter.index}-description">${description}</textarea>
+                                    <br>
                                 </c:forEach>
                             </c:forEach>
                         </c:when>

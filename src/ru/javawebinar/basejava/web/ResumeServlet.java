@@ -4,13 +4,17 @@ import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.SqlStorage;
+import ru.javawebinar.basejava.util.DateUtil;
+import ru.javawebinar.basejava.util.HtmlUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class ResumeServlet extends HttpServlet {
@@ -112,6 +116,30 @@ public class ResumeServlet extends HttpServlet {
                                 .filter(str -> !str.isBlank())
                                 .toArray(String[]::new);
                         section = new ListSection(newListSectionValues);
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        List<Organization> organizations = new ArrayList<>();
+                        String[] values = request.getParameterValues(sectionType.name());
+                        String[] urls = request.getParameterValues(sectionType.name() + "-url");
+                        for (int i = 0; i < values.length; i++) {
+                            String name = values[i];
+                            if (!HtmlUtil.isEmpty(name)) {
+                                List<Organization.Position> positions = new ArrayList<>();
+                                String prefix = String.format("%s-%d", sectionType.name(), i);
+                                String[] startDates = request.getParameterValues(prefix + "-startDate");
+                                String[] endDates = request.getParameterValues(prefix + "-endDate");
+                                String[] titles = request.getParameterValues(prefix + "-title");
+                                String[] descriptions = request.getParameterValues(prefix + "-description");
+                                for (int j = 0; j < titles.length; j++) {
+                                    if (!HtmlUtil.isEmpty(titles[j])) {
+                                        positions.add(new Organization.Position(DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]), titles[j], descriptions[j]));
+                                    }
+                                }
+                                organizations.add(new Organization(new Link(name, urls[i]), positions));
+                            }
+                        }
+                        section = new OrganizationSection(organizations);
                         break;
                 }
                 if (Objects.nonNull(section)) {

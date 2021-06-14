@@ -1,6 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ru.javawebinar.basejava.model.SectionType" %>
 <%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
 
@@ -70,7 +71,7 @@
                                         <c:set var="endDate" value="${position.getEndDate()}"/>
                                         <c:set var="title" value="${position.getTitle()}"/>
                                         <c:set var="description" value="${position.getDescription()}"/>
-                                        ${DateUtil.formatDates(position)}
+                                            ${DateUtil.format(startDate)} - ${DateUtil.format(endDate)}
                                         <b>${title}.</b> ${description.isBlank()? "" : description.concat(".")}
                                     </li>
                                 </c:forEach>
