@@ -73,3 +73,12 @@ a[href*="github."] {
 .link-input {
     margin-left: 13px;
 }
+
+.add-position-button-js,
+.add-organization-button-js {
+    background-color: green;
+    color: white;
+    border-radius: 25%;
+    border-color: white;
+    cursor: pointer;
+}

@@ -102,7 +102,8 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType sectionType : SectionType.values()) {
             String sectionValue = request.getParameter(sectionType.name());
             AbstractSection section = null;
-            if (Objects.isNull(sectionValue) || sectionValue.isBlank()) {
+            String[] values = request.getParameterValues(sectionType.name());
+            if (Objects.isNull(values)) {
                 resume.getSections().remove(sectionType);
             } else {
                 switch (sectionType) {
@@ -120,7 +121,6 @@ public class ResumeServlet extends HttpServlet {
                     case EDUCATION:
                     case EXPERIENCE:
                         List<Organization> organizations = new ArrayList<>();
-                        String[] values = request.getParameterValues(sectionType.name());
                         String[] urls = request.getParameterValues(sectionType.name() + "-url");
                         for (int i = 0; i < values.length; i++) {
                             String name = values[i];
